@@ -10,8 +10,12 @@ import java.util.List;
 public class TransferMoneyRepository {
     private final List<TransferMoneyData> buffer = new ArrayList<>();
 
-    public TransferMoneyData save(TransferMoneyData transferMoneyData) {
+    public TransferMoneyData saveTransferData(TransferMoneyData transferMoneyData) {
         buffer.add(transferMoneyData);
         return transferMoneyData;
+    }
+
+    public List<TransferMoneyData> getAllTransfers() {
+        return buffer;
     }
 }
