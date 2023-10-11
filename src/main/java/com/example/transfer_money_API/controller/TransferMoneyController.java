@@ -1,6 +1,7 @@
 package com.example.transfer_money_API.controller;
 
 import com.example.transfer_money_API.exception.ErrorInputData;
+import com.example.transfer_money_API.exception.ErrorTransfer;
 import com.example.transfer_money_API.model.OperationStatus;
 import com.example.transfer_money_API.model.TransferMoneyData;
 import com.example.transfer_money_API.service.TransferMoneyService;
@@ -19,8 +20,8 @@ public class TransferMoneyController {
     }
 
     @PostMapping("/transfer")
-    public OperationStatus transfer(@Valid @RequestBody TransferMoneyData transferMoneyData) {
-        return transferMoneyService.transfer(transferMoneyData);
+    public OperationStatus transfer(@Valid @RequestBody TransferMoneyData transferMoneyData) throws ErrorInputData, ErrorTransfer {
+        return transferMoneyService.transfer(transferMoneyData).orElseThrow();
     }
 
 }

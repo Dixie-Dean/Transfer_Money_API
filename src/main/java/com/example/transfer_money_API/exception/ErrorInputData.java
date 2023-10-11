@@ -1,11 +1,14 @@
 package com.example.transfer_money_API.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import lombok.Getter;
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+@Getter
 public class ErrorInputData extends Exception {
-    public ErrorInputData(String message) {
-        super(message);
+    private final String id;
+    private final String message;
+
+    public ErrorInputData(String id, String message) {
+        this.id = id;
+        this.message = message;
     }
 }

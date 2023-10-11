@@ -1,12 +1,13 @@
 package com.example.transfer_money_API.service;
 
 import com.example.transfer_money_API.exception.ErrorInputData;
+import com.example.transfer_money_API.exception.ErrorTransfer;
 import com.example.transfer_money_API.model.OperationStatus;
-import com.example.transfer_money_API.repository.TransferMoneyRepository;
 import com.example.transfer_money_API.model.TransferMoneyData;
-import org.springframework.http.HttpStatus;
+import com.example.transfer_money_API.repository.TransferMoneyRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -19,8 +20,8 @@ public class TransferMoneyService {
         this.transferMoneyRepository = transferMoneyRepository;
     }
 
-    public OperationStatus transfer(TransferMoneyData transferMoneyData) {
+    public Optional<OperationStatus> transfer(TransferMoneyData transferMoneyData) throws ErrorInputData, ErrorTransfer {
         transferMoneyRepository.saveTransferData(transferMoneyData);
-        return new OperationStatus(String.valueOf(idCounter.incrementAndGet()), "Successful Operation");
+        return Optional.of(new OperationStatus(String.valueOf(idCounter.incrementAndGet()), "Successful Operation"));
     }
 }
