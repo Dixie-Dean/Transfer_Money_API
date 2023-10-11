@@ -1,4 +1,4 @@
-package com.example.transfer_money_API.model;
+package com.example.transfer_money_API.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;

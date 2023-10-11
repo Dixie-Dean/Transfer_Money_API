@@ -4,11 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ErrorTransfer extends Exception {
-    private final String id;
-    private final String message;
-
-    public ErrorTransfer(String id, String message) {
-        this.id = id;
-        this.message = message;
+    public ErrorTransfer(String message) {
+        super(message);
     }
 }

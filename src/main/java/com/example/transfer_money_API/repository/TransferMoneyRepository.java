@@ -1,6 +1,6 @@
 package com.example.transfer_money_API.repository;
 
-import com.example.transfer_money_API.model.TransferMoneyData;
+import com.example.transfer_money_API.dto.TransferMoneyData;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

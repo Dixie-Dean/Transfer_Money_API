@@ -1,8 +1,7 @@
-package com.example.transfer_money_API.model;
+package com.example.transfer_money_API.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
