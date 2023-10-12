@@ -19,7 +19,7 @@ public class TransferMoneyController {
 
     @PostMapping("/transfer")
     public OperationStatus transfer(@Validated @RequestBody TransferMoneyData transferMoneyData) {
-        return transferMoneyService.transfer(transferMoneyData).orElseThrow();
+        return transferMoneyService.transfer(transferMoneyData);
     }
 
 }
