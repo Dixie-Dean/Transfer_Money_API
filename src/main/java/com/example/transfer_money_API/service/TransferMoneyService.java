@@ -1,11 +1,11 @@
 package com.example.transfer_money_API.service;
 
+import com.example.transfer_money_API.dto.ConfirmationData;
 import com.example.transfer_money_API.dto.OperationStatus;
 import com.example.transfer_money_API.dto.TransferMoneyData;
+import com.example.transfer_money_API.exception.ErrorInputData;
 import com.example.transfer_money_API.repository.TransferMoneyRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class TransferMoneyService {
@@ -16,8 +16,14 @@ public class TransferMoneyService {
     }
 
     public OperationStatus transfer(TransferMoneyData transferMoneyData) {
-        transferMoneyRepository.saveTransferData(transferMoneyData);
+        return transferMoneyRepository.saveTransferData(transferMoneyData);
+    }
 
-        return new OperationStatus(String.valueOf(UUID.randomUUID()), "Successful Operation");
+    public OperationStatus confirm(ConfirmationData confirmationData) throws ErrorInputData {
+        if (confirmationData.getVerificationCode().equals("0000")) {
+            return transferMoneyRepository.saveConfirmationData(confirmationData);
+        } else {
+            throw new ErrorInputData("Wrong verification code!");
+        }
     }
 }

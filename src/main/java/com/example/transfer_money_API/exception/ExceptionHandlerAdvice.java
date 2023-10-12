@@ -26,6 +26,12 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler
+    public ResponseEntity<OperationStatus> handleErrorInputData(ErrorInputData e) {
+        return new ResponseEntity<>(new OperationStatus(
+                String.valueOf(UUID.randomUUID()), e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<OperationStatus> handleErrorTransfer(ErrorTransfer e) {
         return new ResponseEntity<>(new OperationStatus(
                 String.valueOf(UUID.randomUUID()), e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
