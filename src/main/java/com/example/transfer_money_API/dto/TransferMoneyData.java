@@ -1,43 +1,39 @@
 package com.example.transfer_money_API.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class TransferMoneyData {
-    @NotBlank
-    @Size(min = 4, max = 4)
+    @NotBlank(message = "Enter card number")
+    @Size(min = 16, max = 16, message = "Length of card number must be 16")
     private String cardFromNumber;
-    @NotBlank
-    @Size(min = 10, max = 10)
-    private String cardFromValidTill;
-    @NotBlank
-    @Size(min = 3, max = 3)
-    private String cardFromCVV;
-    @NotBlank
-    @Size(min = 4, max = 4)
-    private String cardToNumber;
-    @NotBlank
-    @Size(min = 10, max = 10)
-    private String cardToValidTill;
-    @NotBlank
-    @Size(min = 3, max = 3)
-    private String cardToCVV;
-    @NotNull
-    private Amount amount;
 
-    @Override
-    public String toString() {
-        return "Schema{" +
-                "cardFromNumber='" + cardFromNumber + '\'' +
-                ", cardFromValidTill='" + cardFromValidTill + '\'' +
-                ", cardFromCVV='" + cardFromCVV + '\'' +
-                ", cardToNumber='" + cardToNumber + '\'' +
-                ", cardToValidTill='" + cardToValidTill + '\'' +
-                ", cardToCVV='" + cardToCVV + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
+    @NotBlank(message = "Enter card expiration date")
+    @Pattern(regexp = "(0[1-9]|1[0-2])/([0-9]{2})", message = "Incorrect date")
+    private String cardFromValidTill;
+
+    @NotBlank(message = "Enter card cvv")
+    @Size(min = 3, max = 3, message = "CVV's length must be 3")
+    private String cardFromCVV;
+
+    @NotBlank(message = "Enter card number")
+    @Size(min = 16, max = 16, message = "Length of card number must be 16")
+    private String cardToNumber;
+
+    @NotBlank(message = "Enter card expiration date")
+    @Pattern(regexp = "(0[1-9]|1[0-2])/([0-9]{2})", message = "Incorrect date")
+    private String cardToValidTill;
+
+    @NotBlank(message = "Enter card cvv")
+    @Size(min = 3, max = 3, message = "CVV's length must be 3")
+    private String cardToCVV;
+
+    @Valid
+    private Amount amount;
 }
