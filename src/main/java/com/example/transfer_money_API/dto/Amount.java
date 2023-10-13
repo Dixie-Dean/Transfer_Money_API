@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Amount {
     @Positive(message = "The amount cannot be zero or negative")
-    private int amount;
+    private int sum;
 
     @NotBlank(message = "Enter currency")
     private String currency;
