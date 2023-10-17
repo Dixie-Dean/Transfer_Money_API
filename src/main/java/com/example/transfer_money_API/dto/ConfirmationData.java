@@ -7,5 +7,13 @@ import lombok.Setter;
 @Setter
 public class ConfirmationData {
     private String operationId;
-    private String verificationCode;
+    private String code;
+
+    @Override
+    public String toString() {
+        return "ConfirmationData{" +
+                "operationId='" + operationId + '\'' +
+                ", verificationCode='" + code + '\'' +
+                '}';
+    }
 }

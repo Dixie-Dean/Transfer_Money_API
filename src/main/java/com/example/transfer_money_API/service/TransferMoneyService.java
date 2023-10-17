@@ -27,14 +27,14 @@ public class TransferMoneyService {
                 DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + "\n"
                 + "Card From | " + transferMoneyData.getCardFromNumber() + "\n"
                 + "Card To | " + transferMoneyData.getCardToNumber() + "\n"
-                + "Sum | " + transferMoneyData.getAmount().getSum() + "\n"
+                + "Value | " + transferMoneyData.getAmount().getValue() + "\n"
                 + "Commission | 1%" + "\n"
                 + "Status | " + operationStatus.getDescription() + "\n");
         return operationStatus;
     }
 
     public OperationStatus confirm(ConfirmationData confirmationData) throws ErrorInputData {
-        if (confirmationData.getVerificationCode().equals("0000")) {
+        if (confirmationData.getCode().equals("0000")) {
             return transferMoneyRepository.saveConfirmationData(confirmationData);
         } else {
             throw new ErrorInputData("Wrong verification code!");
