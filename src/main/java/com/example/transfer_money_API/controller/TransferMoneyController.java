@@ -5,6 +5,7 @@ import com.example.transfer_money_API.dto.OperationStatus;
 import com.example.transfer_money_API.dto.TransferMoneyData;
 import com.example.transfer_money_API.exception.ErrorInputData;
 import com.example.transfer_money_API.service.TransferMoneyService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class TransferMoneyController {
     }
 
     @PostMapping("/transfer")
-    public OperationStatus transfer(@RequestBody TransferMoneyData transferMoneyData) {
+    public OperationStatus transfer(@Validated @RequestBody TransferMoneyData transferMoneyData) {
         return transferMoneyService.transfer(transferMoneyData);
     }
 
