@@ -1,0 +1,16 @@
+version: '1'
+
+services:
+  web:
+    build: ./
+
+    image: transfer-money
+
+    restart: always
+
+    stdin_open: true
+
+    tty: true
+
+    ports:
+      - 5500:5500
