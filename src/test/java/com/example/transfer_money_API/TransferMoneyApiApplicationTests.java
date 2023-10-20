@@ -11,30 +11,52 @@ import com.example.transfer_money_API.service.TransferMoneyService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest
+@Testcontainers
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TransferMoneyApiApplicationTests {
+
+	@Autowired
+	TestRestTemplate testRestTemplate;
+
+	@Container
+	private final GenericContainer<?> transferMoneyContainer =
+			new GenericContainer<>("transfer-money:latest")
+					.withExposedPorts(5500);
+
+	@Test
+	void containerTest() {
+		Integer port = transferMoneyContainer.getMappedPort(5500);
+
+		ResponseEntity<String> entity = testRestTemplate.getForEntity(
+				"http://localhost:" + port, String.class);
+
+		Assertions.assertEquals(entity.getStatusCode(), HttpStatusCode.valueOf(404));
+	}
 
 	@Test
 	void transferServiceTest() {
-		//given
 		TransferMoneyService service = Mockito.mock(TransferMoneyService.class);
 		Mockito.when(service.transfer(Mockito.any())).thenReturn(
 				new OperationStatus("0", "Successful"));
 
 		TransferMoneyController controller = new TransferMoneyController(service);
 
-		//act
 		controller.transfer(Mockito.any());
 
-		//verify
 		Mockito.verify(service, Mockito.atLeastOnce()).transfer(Mockito.any());
 	}
 
 	@Test
 	void transferRepositoryTest() {
-		//given
 		Amount amount = Mockito.mock(Amount.class);
 		Mockito.when(amount.getValue()).thenReturn(100);
 		Mockito.when(amount.getCurrency()).thenReturn("RUR");
@@ -53,16 +75,13 @@ class TransferMoneyApiApplicationTests {
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);
 
-		//act
 		controller.transfer(transferMoneyData);
 
-		//verify
 		Mockito.verify(repository, Mockito.atLeastOnce()).saveTransferData(transferMoneyData);
 	}
 
 	@Test
 	void confirmSuccessTest() throws ErrorInputData {
-		//given
 		ConfirmationData confirmationData = new ConfirmationData();
 		confirmationData.setCode("0000");
 		confirmationData.setOperationId(null);
@@ -74,16 +93,13 @@ class TransferMoneyApiApplicationTests {
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);
 
-		//act
 		controller.confirmOperation(confirmationData);
 
-		//verify
 		Mockito.verify(repository, Mockito.atLeastOnce()).saveConfirmationData(confirmationData);
 	}
 
 	@Test
 	void confirmErrorTest() {
-		//given
 		ConfirmationData confirmationData = new ConfirmationData();
 		confirmationData.setCode("0001");
 		confirmationData.setOperationId(null);
@@ -95,7 +111,6 @@ class TransferMoneyApiApplicationTests {
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);
 
-		//verify
 		Assertions.assertThrows(ErrorInputData.class, () -> controller.confirmOperation(confirmationData));
 	}
 
