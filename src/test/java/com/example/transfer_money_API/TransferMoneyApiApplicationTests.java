@@ -20,6 +20,9 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 @Testcontainers
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TransferMoneyApiApplicationTests {
@@ -45,9 +48,6 @@ class TransferMoneyApiApplicationTests {
 	@Test
 	void transferServiceTest() {
 		TransferMoneyService service = Mockito.mock(TransferMoneyService.class);
-		Mockito.when(service.transfer(Mockito.any())).thenReturn(
-				new OperationStatus("0", "Successful"));
-
 		TransferMoneyController controller = new TransferMoneyController(service);
 
 		controller.transfer(Mockito.any());
@@ -69,9 +69,6 @@ class TransferMoneyApiApplicationTests {
 		Mockito.when(transferMoneyData.getAmount()).thenReturn(amount);
 
 		TransferMoneyRepository repository = Mockito.mock(TransferMoneyRepository.class);
-		Mockito.when(repository.saveTransferData(transferMoneyData))
-				.thenReturn(new OperationStatus("0", "Successful"));
-
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);
 
@@ -82,13 +79,20 @@ class TransferMoneyApiApplicationTests {
 
 	@Test
 	void confirmSuccessTest() throws ErrorInputData {
+		TransferMoneyData transferMoneyData = Mockito.mock(TransferMoneyData.class);
+		Mockito.when(transferMoneyData.getId()).thenReturn("0000");
+
 		ConfirmationData confirmationData = new ConfirmationData();
 		confirmationData.setCode("0000");
 		confirmationData.setOperationId(null);
 
+		Deque<TransferMoneyData> transfers = new ConcurrentLinkedDeque<>();
+		transfers.push(transferMoneyData);
+
 		TransferMoneyRepository repository = Mockito.mock(TransferMoneyRepository.class);
 		Mockito.when(repository.saveConfirmationData(confirmationData)).thenReturn(
 				new OperationStatus("0", "Successful"));
+		Mockito.when(repository.getTransfers()).thenReturn(transfers);
 
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);
@@ -100,13 +104,20 @@ class TransferMoneyApiApplicationTests {
 
 	@Test
 	void confirmErrorTest() {
+		TransferMoneyData transferMoneyData = Mockito.mock(TransferMoneyData.class);
+		Mockito.when(transferMoneyData.getId()).thenReturn("0000");
+
 		ConfirmationData confirmationData = new ConfirmationData();
 		confirmationData.setCode("0001");
 		confirmationData.setOperationId(null);
 
+		Deque<TransferMoneyData> transfers = new ConcurrentLinkedDeque<>();
+		transfers.push(transferMoneyData);
+
 		TransferMoneyRepository repository = Mockito.mock(TransferMoneyRepository.class);
 		Mockito.when(repository.saveConfirmationData(confirmationData)).thenReturn(
 				new OperationStatus("0", "Successful"));
+		Mockito.when(repository.getTransfers()).thenReturn(transfers);
 
 		TransferMoneyService service = new TransferMoneyService(repository);
 		TransferMoneyController controller = new TransferMoneyController(service);

@@ -30,7 +30,7 @@ public class TransferMoneyService {
                 + "Card To | " + transferMoneyData.getCardToNumber() + "\n"
                 + "Value | " + transferMoneyData.getAmount().getValue() / 100 + "\n"
                 + "Commission | 1%" + "\n"
-                + "ID | " + transferMoneyData.getId());
+                + "ID | " + transferMoneyData.getId() + "\n");
         transferMoneyRepository.saveTransferData(transferMoneyData);
     }
 
