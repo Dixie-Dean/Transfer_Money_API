@@ -29,6 +29,8 @@ public class TransferMoneyData {
     @Valid
     private Amount amount;
 
+    private String id;
+
     @Override
     public String toString() {
         return "TransferMoneyData{" +

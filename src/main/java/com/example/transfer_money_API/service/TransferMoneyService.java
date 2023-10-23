@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class TransferMoneyService {
@@ -20,21 +21,24 @@ public class TransferMoneyService {
         this.transferMoneyRepository = transferMoneyRepository;
     }
 
-    public OperationStatus transfer(TransferMoneyData transferMoneyData) {
+    public void transfer(TransferMoneyData transferMoneyData) {
+        transferMoneyData.setId(String.valueOf(UUID.randomUUID()));
         Logger logger = new Logger("src/main/java/com/example/transfer_money_API/info/logs.txt");
-        OperationStatus operationStatus = transferMoneyRepository.saveTransferData(transferMoneyData);
         logger.log("Date | " + LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + "\n"
                 + "Card From | " + transferMoneyData.getCardFromNumber() + "\n"
                 + "Card To | " + transferMoneyData.getCardToNumber() + "\n"
                 + "Value | " + transferMoneyData.getAmount().getValue() + "\n"
                 + "Commission | 1%" + "\n"
-                + "Status | " + operationStatus.getDescription() + "\n");
-        return operationStatus;
+                + "ID | " + transferMoneyData.getId());
+        transferMoneyRepository.saveTransferData(transferMoneyData);
     }
 
     public OperationStatus confirm(ConfirmationData confirmationData) throws ErrorInputData {
-        if (confirmationData.getCode().equals("0000")) {
+        TransferMoneyData transferMoneyData = transferMoneyRepository.getTransfers().pop();
+        String code = transferMoneyRepository.getOperations()
+                .getOrDefault(transferMoneyData.getId(), "0000");
+        if (confirmationData.getCode().equals(code)) {
             return transferMoneyRepository.saveConfirmationData(confirmationData);
         } else {
             throw new ErrorInputData("Wrong verification code!");

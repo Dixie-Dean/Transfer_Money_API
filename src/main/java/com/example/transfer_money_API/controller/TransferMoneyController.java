@@ -21,8 +21,8 @@ public class TransferMoneyController {
     }
 
     @PostMapping("/transfer")
-    public OperationStatus transfer(@Validated @RequestBody TransferMoneyData transferMoneyData) {
-        return transferMoneyService.transfer(transferMoneyData);
+    public void transfer(@Validated @RequestBody TransferMoneyData transferMoneyData) {
+        transferMoneyService.transfer(transferMoneyData);
     }
 
     @PostMapping("/confirmOperation")
