@@ -28,7 +28,7 @@ public class TransferMoneyService {
                 DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")) + "\n"
                 + "Card From | " + transferMoneyData.getCardFromNumber() + "\n"
                 + "Card To | " + transferMoneyData.getCardToNumber() + "\n"
-                + "Value | " + transferMoneyData.getAmount().getValue() + "\n"
+                + "Value | " + transferMoneyData.getAmount().getValue() / 100 + "\n"
                 + "Commission | 1%" + "\n"
                 + "ID | " + transferMoneyData.getId());
         transferMoneyRepository.saveTransferData(transferMoneyData);
